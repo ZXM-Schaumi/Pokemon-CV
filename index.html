@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon TCG Resume - Xiaoman Zhang</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@300;400;600;700&display=swap');
+
+    .font-orbitron { font-family: 'Orbitron', sans-serif; }
+    .font-sans { font-family: 'Inter', sans-serif; }
+
+    /* Holographic Card Effect */
+    .card-container {
+      perspective: 1000px;
+    }
+    
+    .pokemon-card {
+      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+      transform-style: preserve-3d;
+      background: linear-gradient(135deg, #ffe066 0%, #f59e0b 35%, #d97706 100%);
+      border: 12px solid #fef08a;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 25px rgba(245, 158, 11, 0.4);
+    }
+
+    .holo-overlay {
+      background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba(255, 255, 255, 0.4) 40%,
+        rgba(255, 0, 128, 0.2) 60%,
+        rgba(0, 255, 255, 0.3) 80%,
+        transparent 100%
+      );
+      background-size: 200% 200%;
+      opacity: 0.6;
+      pointer-events: none;
+      mix-blend-mode: color-dodge;
+    }
+
+    /* Druck-Styles für den ATS / KI-Modus */
+    @media print {
+      @page {
+        margin: 12mm 10mm;
+        size: A4 portrait;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* Gesamten Body im Druck auf ATS-Dunkelblau setzen */
+      html, body {
+        background-color: #0f172a !important;
+        color: #f8fafc !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        min-height: 100% !important;
+      }
+
+      /* Alle UI-Elemente, Header, Suchleiste und die Pokémon-Karte strikt ausblenden */
+      header,
+      .no-print,
+      .pokemon-card-wrapper,
+      #card-view,
+      .card-container,
+      #tilted-card,
+      #gemini-modal {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      /* Main-Container für den Druck zurücksetzen */
+      main {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      /* Maximale Spezifität: Überschreibt Tailwinds '.hidden' garantiert */
+      body div#ats-view,
+      body div#ats-view.hidden {
+        display: block !important;
+        visibility: visible !important;
+        background-color: #0f172a !important;
+        color: #f8fafc !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        position: static !important;
+      }
+
+      /* Exakte Farbführung für Texte & Überschriften */
+      #ats-view h1,
+      #ats-view .text-white {
+        color: #ffffff !important;
+      }
+
+      #ats-view h2,
+      #ats-view .text-amber-400 {
+        color: #f59e0b !important;
+      }
+
+      #ats-view .text-slate-300 {
+        color: #cbd5e1 !important;
+      }
+
+      #ats-view .text-slate-400 {
+        color: #94a3b8 !important;
+      }
+
+      #ats-view .border-slate-800 {
+        border-color: #334155 !important;
+      }
+
+      #ats-view .bg-amber-500\/10 {
+        background-color: rgba(245, 158, 11, 0.15) !important;
+        border-color: rgba(245, 158, 11, 0.4) !important;
+      }
+
+      /* Saubere Seitenumbrüche: Hält Berufserfahrungs-Blöcke zusammen */
+      article.keyword-item {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 1.25rem !important;
+      }
+
+      section {
+        page-break-inside: auto !important;
+        break-inside: auto !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-amber-500 selection:text-black">
+
+  <!-- Top Navigation & Controls -->
+  <header class="no-print sticky top-0 z-50 bg-slate-900/90 backdrop-blur border-b border-amber-500/30 px-4 py-3">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black font-extrabold text-xl shadow-lg shadow-amber-500/30">
+          ⚡
+        </div>
+        <div>
+          <h1 class="font-orbitron font-bold text-lg text-amber-400 tracking-wide">XIAOMAN ZHANG</h1>
+          <p class="text-xs text-slate-400">Senior Scrum Product Owner • Level 6+ XP</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher Tabs -->
+      <div class="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700">
+        <button id="btn-card-mode" onclick="switchMode('card')" class="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-200 bg-amber-500 text-black shadow cursor-pointer">
+          <i class="fa-solid fa-id-card mr-1.5"></i> 🎴 Pokémon Card
+        </button>
+        <button id="btn-ats-mode" onclick="switchMode('ats')" class="px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-300 hover:text-white transition-all duration-200 cursor-pointer">
+          <i class="fa-solid fa-file-lines mr-1.5"></i> 📄 ATS
+        </button>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center space-x-2">
+        <button onclick="printCV()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium rounded-lg border border-slate-700 flex items-center gap-2 transition hover:border-amber-500 cursor-pointer">
+          <i class="fa-solid fa-print"></i> PDF / Drucken
+        </button>
+        <button onclick="copyATSText()" class="px-3 py-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-xs font-medium rounded-lg border border-amber-500/30 flex items-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-copy"></i> Text kopieren
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-4 md:p-8">
+
+    <!-- SEARCH & FILTER BAR FOR RECRUITERS -->
+    <div class="no-print mb-8 bg-slate-900/80 p-4 rounded-2xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+      <div class="relative w-full md:w-96">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-sm"></i>
+        <input type="text" id="skill-search" onkeyup="filterKeywords()" placeholder="Skill oder Tool suchen (z.B. Camunda, Jira, Python)..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500 transition">
+      </div>
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <span class="text-slate-400 font-medium">Quick Stats:</span>
+        <span class="px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-full font-mono">6+ Jahre PO XP</span>
+        <span class="px-2.5 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded-full font-mono">80 ➔ 25 System Reduzierung</span>
+        <span class="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-full font-mono">PSM II Certified</span>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 1: POKEMON TCG CARD MODE (VISUAL GAMIFIED)                           -->
+    <!-- ========================================================================= -->
+    <div id="card-view" class="pokemon-card-wrapper transition-all duration-300">
+      <div class="card-container flex justify-center items-center py-4">
+        
+        <!-- THE CARD CONTAINER -->
+        <div id="tilted-card" class="pokemon-card relative w-full max-w-2xl rounded-3xl p-5 md:p-7 text-slate-900 overflow-hidden select-none">
+          
+          <!-- Holographic Overlay -->
+          <div id="holo" class="holo-overlay absolute inset-0 rounded-3xl"></div>
+
+          <!-- CARD HEADER -->
+          <div class="flex justify-between items-start border-b-4 border-amber-700/40 pb-3 mb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold uppercase tracking-widest text-amber-900/80">Stage 2 • Senior Evolution</span>
+                <span class="text-[10px] bg-amber-950 text-amber-200 px-2 py-0.5 rounded-full font-mono font-bold">PO-CARD #001</span>
+              </div>
+              <h2 class="font-orbitron text-2xl md:text-3xl font-black text-slate-950 tracking-tight">XIAOMAN ZHANG</h2>
+              <p class="text-xs font-extrabold text-amber-900">Senior Scrum Product Owner</p>
+            </div>
+            <div class="text-right flex items-center gap-2">
+              <span class="text-xs font-black text-amber-900">HP</span>
+              <span class="font-orbitron text-3xl font-black text-red-700 tracking-tight">600</span>
+              <div class="w-8 h-8 rounded-full bg-amber-400 border-2 border-amber-800 flex items-center justify-center text-lg font-bold shadow-md">
+                ⚡
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD ARTWORK / HERO IMAGE FRAME -->
+          <div class="relative bg-gradient-to-b from-amber-100 to-yellow-200 border-4 border-amber-300/80 rounded-2xl p-4 mb-4 shadow-inner">
+            <div class="flex flex-col md:flex-row items-center gap-4">
+              <div class="w-32 h-32 md:w-36 md:h-36 rounded-2xl overflow-hidden border-4 border-amber-500 shadow-md bg-amber-100 flex-shrink-0 relative group">
+                <!-- Primary Image: Fallback to Official Pikachu Artwork -->
+                <img src="yeah.jpg">
+                <div class="absolute bottom-0 inset-x-0 bg-black/70 text-[10px] text-amber-300 text-center py-0.5 font-mono">Product Owner</div>
+              </div>
+
+              <div class="flex-1 space-y-2 text-xs">
+                <div class="bg-amber-50/80 p-2.5 rounded-xl border border-amber-300 text-slate-800">
+                  <span class="font-bold text-amber-900 block mb-0.5"><i class="fa-solid fa-compass mr-1"></i> TRAINER PROFIL:</span>
+                  Erfahrener Scrum Product Owner (6+ Jahre XP) mit tiefem Fokus auf Anforderungsmanagement, BPMN-Prozessoptimierung, API-Integrationen und KI-gestützte Workflow-Automatisierung.
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-[11px] font-bold">
+                  <div class="bg-amber-200/80 px-2 py-1 rounded border border-amber-400 text-amber-950">
+                    📍 Standort: Berlin
+                  </div>
+                  <div class="bg-amber-200/80 px-2 py-1 rounded border border-amber-400 text-amber-950">
+                    🎓 B.Sc. TU Berlin
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASSIVE ABILITIES SECTION -->
+          <div class="space-y-2 mb-4">
+            <!-- Ability 1 -->
+            <div class="bg-amber-100/90 border-2 border-amber-400 rounded-xl p-2.5 shadow-sm">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Ability</span>
+                <h3 class="font-orbitron font-bold text-sm text-slate-900">Requirements Mastery (Passive)</h3>
+              </div>
+              <p class="text-xs text-slate-800 leading-relaxed">
+                Transformiert unklare Stakeholder-Initiativen präzise in strukturierte, testbare User Stories, Akzeptanzkriterien & reaktionsschnelle MVP-Backlogs.
+              </p>
+            </div>
+
+            <!-- Ability 2 -->
+            <div class="bg-amber-100/90 border-2 border-amber-400 rounded-xl p-2.5 shadow-sm">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="bg-purple-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">Ability</span>
+                <h3 class="font-orbitron font-bold text-sm text-slate-900">Vibe Coding & AI Support (Passive)</h3>
+              </div>
+              <p class="text-xs text-slate-800 leading-relaxed">
+                Nutzt Copilot Studio, Prompt Engineering, Python & Vibe Coding zur Automatisierung von Support-Abläufen und Beschleunigung von Dev-Zyklen.
+              </p>
+            </div>
+          </div>
+
+          <!-- ATTACKS & MAIN MOVES (EXPERIENCE) -->
+          <div class="space-y-3 mb-5">
+            <h3 class="font-orbitron font-extrabold text-xs text-amber-950 tracking-wider uppercase border-b-2 border-amber-800/30 pb-1">
+              ⚔️ MAIN MOVES & EXPERIENCE
+            </h3>
+
+            <!-- Attack 1: Zertificon -->
+            <div class="bg-amber-50/90 p-3 rounded-xl border border-amber-300 shadow-sm hover:border-amber-500 transition">
+              <div class="flex justify-between items-center mb-1">
+                <div class="flex items-center gap-2">
+                  <span class="w-5 h-5 rounded-full bg-amber-400 text-xs flex items-center justify-center font-bold">⚡</span>
+                  <span class="w-5 h-5 rounded-full bg-amber-400 text-xs flex items-center justify-center font-bold">⚡</span>
+                  <h4 class="font-bold text-sm text-slate-950">Multi-Tenant & E2E Certificate Unblock</h4>
+                </div>
+                <span class="font-orbitron font-black text-lg text-amber-900">120 DMG</span>
+              </div>
+              <p class="text-xs text-slate-700 mb-1">
+                <strong>Zertificon Solutions GmbH</strong> (09/2025 – 02/2026)
+              </p>
+              <ul class="text-[11px] text-slate-800 space-y-0.5 list-disc list-inside">
+                <li>End-to-End Verantwortung für Issuance, Renewal & Revocation Zertifikatstools.</li>
+                <li>Reaktivierung blockierten Multi-Tenant Projekts via 10+ Workshops & SugarCRM Harmonisierung.</li>
+                <li>Telekom-API Integration & UX-Prototyping mit Figma Make.</li>
+              </ul>
+            </div>
+
+            <!-- Attack 2: BASF -->
+            <div class="bg-amber-50/90 p-3 rounded-xl border border-amber-300 shadow-sm hover:border-amber-500 transition">
+              <div class="flex justify-between items-center mb-1">
+                <div class="flex items-center gap-2">
+                  <span class="w-5 h-5 rounded-full bg-amber-400 text-xs flex items-center justify-center font-bold">⚡</span>
+                  <span class="w-5 h-5 rounded-full bg-blue-400 text-xs flex items-center justify-center font-bold">💧</span>
+                  <h4 class="font-bold text-sm text-slate-950">System Consolidation Blast (80 ➔ 25)</h4>
+                </div>
+                <span class="font-orbitron font-black text-lg text-amber-900">150 DMG</span>
+              </div>
+              <p class="text-xs text-slate-700 mb-1">
+                <strong>BASF Services Europe GmbH</strong> (11/2021 – 08/2025)
+              </p>
+              <ul class="text-[11px] text-slate-800 space-y-0.5 list-disc list-inside">
+                <li>Konsolidierung der Anwendungslandschaft von 80 auf 25 Systeme.</li>
+                <li>Geschäftsprozess-Modellierung mit BPMN (Camunda).</li>
+                <li>Entwicklung intelligenter Support Chatbots mit Copilot Studio.</li>
+              </ul>
+            </div>
+
+            <!-- Attack 3: Companion & Dominion -->
+            <div class="bg-amber-50/90 p-3 rounded-xl border border-amber-300 shadow-sm hover:border-amber-500 transition">
+              <div class="flex justify-between items-center mb-1">
+                <div class="flex items-center gap-2">
+                  <span class="w-5 h-5 rounded-full bg-red-400 text-xs flex items-center justify-center font-bold">🔥</span>
+                  <h4 class="font-bold text-sm text-slate-950">Agile Workflow Setup & Stakeholder Alignment</h4>
+                </div>
+                <span class="font-orbitron font-black text-lg text-amber-900">80 DMG</span>
+              </div>
+              <p class="text-xs text-slate-700 mb-1">
+                <strong>.companion & Dominion Inc.</strong> (2019 – 2021)
+              </p>
+              <ul class="text-[11px] text-slate-800 space-y-0.5 list-disc list-inside">
+                <li>Einführung von Jira & Confluence Artefakten, Moderation aller Scrum-Events.</li>
+                <li>Steuerung des Product Backlogs & Schnittstellen-Kommunikation.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- INVENTORY / SKILL STATS GRID -->
+          <div class="bg-amber-200/90 rounded-2xl p-3 border-2 border-amber-400 mb-4">
+            <h4 class="font-orbitron font-extrabold text-xs text-amber-950 mb-2 flex items-center gap-1.5">
+              🎒 INVENTORY & SKILL STATS
+            </h4>
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div class="bg-white/80 p-2 rounded-lg border border-amber-300">
+                <strong class="text-amber-900 block">Agile & Product:</strong>
+                Scrum, Kanban, User Stories, Backlog Refinement, Nexus, BANI, Cynefin, Customer Journey Map
+              </div>
+              <div class="bg-white/80 p-2 rounded-lg border border-amber-300">
+                <strong class="text-amber-900 block">Software & Tools:</strong>
+                Jira, Confluence, Azure DevOps, Figma Make, Camunda (BPMN), Power BI, Miro
+              </div>
+              <div class="bg-white/80 p-2 rounded-lg border border-amber-300">
+                <strong class="text-amber-900 block">AI & Tech:</strong>
+                Copilot Studio, Vibe Coding, Python, Prompt Eng., Power Automate
+              </div>
+              <div class="bg-white/80 p-2 rounded-lg border border-amber-300">
+                <strong class="text-amber-900 block">Languages:</strong>
+                Chinesisch (Muttersprache), Deutsch (Muttersprache), Englisch (C1)
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD FOOTER / WEAKNESS / RETREAT -->
+          <div class="border-t-2 border-amber-800/40 pt-2 flex justify-between items-center text-[10px] font-bold text-amber-950">
+            <div>
+              <span>Weakness: </span>
+              <span class="bg-amber-300 px-1.5 py-0.5 rounded border border-amber-500">Silo-Denken ×2</span>
+            </div>
+            <div>
+              <span>Resistance: </span>
+              <span class="bg-amber-300 px-1.5 py-0.5 rounded border border-amber-500">Scope Creep -30</span>
+            </div>
+            <div>
+              <span>Retreat Cost: </span>
+              <span>⚡⚡</span>
+            </div>
+          </div>
+
+          <!-- FLAVOR TEXT -->
+          <p class="mt-2 text-[9px] text-amber-900/80 italic text-center">
+            "Ein extrem anpassungsfähiger Senior PO. Bekannt dafür, blockierte Projekte mit präziser Kommunikation und KI-Tools in Höchstgeschwindigkeit freizuschalten."
+          </p>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 2: ATS & KI SCREENING MODE (CLEAN TEXT CV)                           -->
+    <!-- ========================================================================= -->
+    <div id="ats-view" class="hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-10 shadow-2xl">
+      
+      <!-- ATS HEADER -->
+      <header class="border-b border-slate-800 pb-6 mb-6">
+        <h1 class="text-3xl font-bold text-white mb-1">Xiaoman Zhang</h1>
+        <p class="text-lg font-semibold text-amber-400">Senior Scrum Product Owner</p>
+        
+        <div class="mt-4 flex flex-wrap gap-y-2 gap-x-6 text-sm text-slate-300">
+          <span><i class="fa-solid fa-location-dot text-amber-400 mr-2"></i>Seeburger Strasse 5, 13581 Berlin, Deutschland</span>
+          <span><i class="fa-solid fa-envelope text-amber-400 mr-2"></i>xiaomanlovi@googlemail.com</span>
+          <span><i class="fa-solid fa-phone text-amber-400 mr-2"></i>+49 17631368517</span>
+        </div>
+      </header>
+
+      <!-- PROFIL / SUMMARY -->
+      <section class="mb-8">
+        <h2 class="text-lg font-bold text-amber-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-3">
+          PROFIL & ZUSAMMENFASSUNG
+        </h2>
+        <p class="text-sm text-slate-300 leading-relaxed">
+          Erfahrener Scrum Product Owner (6+ Jahre Erfahrung) mit Schwerpunkt Anforderungsmanagement, Prozessoptimierung und der Umsetzung komplexer, bereichsübergreifender IT- & Digitalprojekte. Routiniert in der Erhebung, Analyse und Priorisierung fachlicher Anforderungen, der Moderation von Agilen Workshops und der schnellen Einarbeitung in neue technische Domänen. Sicher in der Strukturierung unklarer Initiativen und deren Übersetzung in klare, testbare User Stories und Akzeptanzkriterien. Tiefgehende Erfahrung mit Jira, Confluence und Azure DevOps sowie fundierte Kenntnisse in BPMN (Camunda), UX-Prototyping (Figma) und KI-gestützter Workflow-Automatisierung.
+        </p>
+      </section>
+
+      <!-- BERUFSERFAHRUNG -->
+      <section class="mb-8 space-y-6">
+        <h2 class="text-lg font-bold text-amber-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-3">
+          BERUFSERFAHRUNG
+        </h2>
+
+        <!-- Role 1 -->
+        <article class="keyword-item">
+          <div class="flex flex-col md:flex-row justify-between md:items-center mb-1">
+            <h3 class="font-bold text-base text-white">Senior Scrum Product Owner – Business Management Platform</h3>
+            <span class="text-xs font-mono text-amber-400 bg-amber-500/10 px-2 py-1 rounded border border-amber-500/20">09/2025 – 02/2026</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-2 font-medium">Zertificon Solutions GmbH • Berlin, Deutschland</p>
+          <ul class="list-disc list-inside text-sm text-slate-300 space-y-1.5">
+            <li>End-to-End-Verantwortung für zentrale Zertifikatstools übernommen; fachliche Anforderungen strukturiert, priorisiert und in stabile Issuance-, Renewal- und Revocation-Prozesse überführt.</li>
+            <li>Blockiertes Multi-Tenant-Projekt reaktiviert, Anforderungen in über 10 Stakeholder-Workshops erhoben und Lösung inklusive SugarCRM-Datenharmonisierung geliefert.</li>
+            <li>Kritischen DARZ-Renewal-Prozess durch Klärung von Verantwortlichkeiten und E2E-Testprozesse innerhalb eines Monats erfolgreich ausgeliefert.</li>
+            <li>Telekom-API-Integration verantwortet, Domain-Validation-Prozesse mittels UX-Prototypen geschärft und interaktive Figma-Prototypen (Figma Make) erstellt.</li>
+            <li>Präzise User Stories und Akzeptanzkriterien formuliert; KI-gestützte Techniken zur Anforderungsdefinition eingesetzt zur Verkürzung der Entwicklungszyklen.</li>
+            <li>Team-Enablement durch Workshops zu optimierten Scrum-/Jira-Prozessen sowie Aufbau strukturierter Confluence-Dokumentationen.</li>
+          </ul>
+        </article>
+
+        <!-- Role 2 -->
+        <article class="keyword-item">
+          <div class="flex flex-col md:flex-row justify-between md:items-center mb-1">
+            <h3 class="font-bold text-base text-white">Professionelle/r Scrum Product-Owner/in</h3>
+            <span class="text-xs font-mono text-amber-400 bg-amber-500/10 px-2 py-1 rounded border border-amber-500/20">11/2021 – 08/2025</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-2 font-medium">BASF Services Europe GmbH • Berlin, Deutschland</p>
+          <ul class="list-disc list-inside text-sm text-slate-300 space-y-1.5">
+            <li>Fachliche Anforderungen systematisch erhoben, analysiert und priorisiert; Abstimmung mit Stakeholdern zur Definition klarer MVP-Kriterien.</li>
+            <li>Konsolidierung der Anwendungslandschaft von 80 auf 25 Systeme durch strukturierte Anforderungsanalyse und Eliminierung redundanter Lösungen.</li>
+            <li>Geschäftsprozesse mittels BPMN (Camunda) modelliert und optimiert zur Standardisierung fachlicher Abläufe und Risikoreduzierung.</li>
+            <li>Entwicklung von Chatbots mit Copilot Studio zur Automatisierung wiederkehrender Support-Prozesse.</li>
+            <li>Revisionssichere Dokumentation von Anforderungen, Prozessmodellen und Artefakten in SharePoint, Jira und Confluence.</li>
+            <li>User Stories mit präzisen Akzeptanzkriterien verfasst; Durchführung regelmäßiger Grooming- & Refinement-Sessions.</li>
+          </ul>
+        </article>
+
+        <!-- Role 3 -->
+        <article class="keyword-item">
+          <div class="flex flex-col md:flex-row justify-between md:items-center mb-1">
+            <h3 class="font-bold text-base text-white">Produktmanager/in</h3>
+            <span class="text-xs font-mono text-amber-400 bg-amber-500/10 px-2 py-1 rounded border border-amber-500/20">02/2021 – 07/2021</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-2 font-medium">.companion Strategieberatung GmbH • Berlin, Deutschland</p>
+          <ul class="list-disc list-inside text-sm text-slate-300 space-y-1.5">
+            <li>Erfolgreiche Einführung und Konfiguration von Jira & Confluence im Team.</li>
+            <li>Vorbereitung und Moderation aller Scrum-Events (Daily, Sprint Planning, Grooming, Retrospective, Review).</li>
+            <li>Analyse von Stakeholder Pain Points und Validierung mittels Timebox-Modell.</li>
+          </ul>
+        </article>
+
+        <!-- Role 4 -->
+        <article class="keyword-item">
+          <div class="flex flex-col md:flex-row justify-between md:items-center mb-1">
+            <h3 class="font-bold text-base text-white">Scrum Product Owner (Plattform)</h3>
+            <span class="text-xs font-mono text-amber-400 bg-amber-500/10 px-2 py-1 rounded border border-amber-500/20">09/2019 – 12/2020</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-2 font-medium">Dominion Inc. • Berlin, Deutschland</p>
+          <ul class="list-disc list-inside text-sm text-slate-300 space-y-1.5">
+            <li>Interne und externe Stakeholder-Kommunikation für Produktanforderungen.</li>
+            <li>Product Backlog Management und Sprint-Planung mit Atlassian Jira.</li>
+          </ul>
+        </article>
+
+        <!-- Role 5 -->
+        <article class="keyword-item">
+          <div class="flex flex-col md:flex-row justify-between md:items-center mb-1">
+            <h3 class="font-bold text-base text-white">Data Manager</h3>
+            <span class="text-xs font-mono text-amber-400 bg-amber-500/10 px-2 py-1 rounded border border-amber-500/20">06/2018 – 06/2019</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-2 font-medium">Zeppelin Lab GmbH • Berlin, Deutschland</p>
+          <ul class="list-disc list-inside text-sm text-slate-300 space-y-1.5">
+            <li>Datenmanagement & Automatisierung von Datenbankprozessen mittels Python Skripten (ETL).</li>
+            <li>Datenanalyse und Qualitätskontrolle mit Metabase & Kanban.</li>
+          </ul>
+        </article>
+      </section>
+
+      <!-- SKILLS & ZERTIFIZIERUNGEN -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        
+        <!-- Skills -->
+        <section>
+          <h2 class="text-lg font-bold text-amber-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-3">
+            FÄHIGKEITEN & METHODEN
+          </h2>
+          <div class="space-y-2 text-sm text-slate-300">
+            <div><strong class="text-white">Agiles Mgmt:</strong> Scrum, Kanban, Product Backlog Management, User Stories, Stakeholder-Management</div>
+            <div><strong class="text-white">Prozess & Tools:</strong> BPMN (Camunda), Jira, Confluence, Azure DevOps, Figma Make, Power BI, Power Automate, Miro</div>
+            <div><strong class="text-white">KI & Tech:</strong> Copilot Studio, Vibe Coding (Prompt Eng., GitHub, VS Code), Python, SugarCRM</div>
+            <div><strong class="text-white">Frameworks:</strong> Scrum, Nexus, BANI, Cynefin, Kotter 8-Stufen, Liberating Structures</div>
+          </div>
+        </section>
+
+        <!-- Certifications & Education -->
+        <section>
+          <h2 class="text-lg font-bold text-amber-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-3">
+            AUSBILDUNG & ZERTIFIZIERUNGEN
+          </h2>
+          <ul class="text-sm text-slate-300 space-y-2">
+            <li>
+              <strong class="text-white">Professional Scrum Master II (PSM II)</strong>
+            </li>
+            <li>
+              <strong class="text-white">PSM & PSPO Advanced Training (2026):</strong> KnOot Academy (BANI, Zombie Scrum Survival, Agile Maturity Level, Scaled Agile, Customer Journey, Konfliktmanagement)
+            </li>
+            <li>
+              <strong class="text-white">B.Sc. Wirtschaftsmathematik (2016):</strong> Technische Universität Berlin
+            </li>
+          </ul>
+        </section>
+
+      </div>
+
+      <!-- SPRACHEN -->
+      <section>
+        <h2 class="text-lg font-bold text-amber-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-3">
+          SPRACHEN
+        </h2>
+        <div class="flex gap-6 text-sm text-slate-300">
+          <span><strong class="text-white">Deutsch:</strong> Muttersprache</span>
+          <span><strong class="text-white">Chinesisch:</strong> Muttersprache</span>
+          <span><strong class="text-white">Englisch:</strong> Verhandlungssicher (C1)</span>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Mode Switching
+    function switchMode(mode) {
+      const cardView = document.getElementById('card-view');
+      const atsView = document.getElementById('ats-view');
+      const btnCard = document.getElementById('btn-card-mode');
+      const btnAts = document.getElementById('btn-ats-mode');
+
+      if (mode === 'card') {
+        cardView.classList.remove('hidden');
+        atsView.classList.add('hidden');
+        btnCard.className = "px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-200 bg-amber-500 text-black shadow cursor-pointer";
+        btnAts.className = "px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-300 hover:text-white transition-all duration-200 cursor-pointer";
+      } else {
+        cardView.classList.add('hidden');
+        atsView.classList.remove('hidden');
+        btnAts.className = "px-4 py-2 rounded-lg text-xs md:text-sm font-semibold transition-all duration-200 bg-amber-500 text-black shadow cursor-pointer";
+        btnCard.className = "px-4 py-2 rounded-lg text-xs md:text-sm font-semibold text-slate-300 hover:text-white transition-all duration-200 cursor-pointer";
+      }
+    }
+
+    // Robuster Druck-Handler mit Mehrebenen-Fallback
+    function printCV() {
+      // 1. Zuerst in den sauberen ATS-Modus schalten
+      switchMode('ats');
+
+      // 2. Versuch, eine druckfertige Ansicht in einem neuen Fenster/Tab zu öffnen (umgeht Iframe-Sandbox-Sperren)
+      try {
+        const atsContent = document.getElementById('ats-view').innerHTML;
+        const printWin = window.open('', '_blank');
+        if (printWin) {
+          printWin.document.write(`
+            <!DOCTYPE html>
+            <html lang="de">
+            <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Lebenslauf - Xiaoman Zhang</title>
+              <script src="https://cdn.tailwindcss.com"><\/script>
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+              <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+                body { font-family: 'Inter', sans-serif; background-color: #0f172a !important; color: #f8fafc !important; }
+                * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                article.keyword-item { page-break-inside: avoid !important; break-inside: avoid !important; margin-bottom: 1.2rem !important; }
+                @media print {
+                  @page { margin: 10mm; size: A4 portrait; }
+                  body { background-color: #0f172a !important; color: #f8fafc !important; }
+                  .no-print { display: none !important; }
+                }
+              </style>
+            </head>
+            <body class="bg-slate-950 text-slate-100 p-6 md:p-10 antialiased">
+              <div class="max-w-4xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-10 shadow-2xl">
+                ${atsContent}
+              </div>
+              <script>
+                window.onload = function() {
+                  setTimeout(function() {
+                    window.print();
+                  }, 400);
+                };
+              <\/script>
+            </body>
+            </html>
+          `);
+          printWin.document.close();
+          showToast("Druckansicht im neuen Tab geöffnet!");
+          return;
+        }
+      } catch (e) {
+        console.warn("Pop-up Druckfenster blockiert, nutze direkten window.print Fallback.", e);
+      }
+
+      // 3. Fallback: Direkter Browser-Druckbefehl
+      showToast("ATS-Modus aktiv! Nutze Strg + P (Cmd + P) zum Speichern als PDF.");
+      setTimeout(() => {
+        try {
+          window.print();
+        } catch (err) {
+          console.error("Druckfehler:", err);
+        }
+      }, 300);
+    }
+
+    // Toast Benachrichtigungen
+    function showToast(message) {
+      let toast = document.getElementById('toast-notification');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast-notification';
+        toast.className = 'fixed bottom-5 right-5 bg-amber-500 text-slate-950 px-4 py-2.5 rounded-xl font-bold shadow-2xl z-50 transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2 text-xs md:text-sm';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${message}`;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
+
+    // 3D Tilt Effect on Pokémon Card
+    const card = document.getElementById('tilted-card');
+    const holo = document.getElementById('holo');
+
+    if (card) {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -12;
+        const rotateY = ((x - centerX) / centerX) * 12;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        holo.style.backgroundPosition = `${x / 2}% ${y / 2}%`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        holo.style.backgroundPosition = '50% 50%';
+      });
+    }
+
+    // Keyword Filtering for Search
+    function filterKeywords() {
+      const query = document.getElementById('skill-search').value.toLowerCase();
+      const items = document.querySelectorAll('.keyword-item, .pokemon-card div');
+
+      if (!query) {
+        items.forEach(el => el.style.opacity = '1');
+        return;
+      }
+
+      items.forEach(el => {
+        if (el.textContent.toLowerCase().includes(query)) {
+          el.style.opacity = '1';
+        } else {
+          el.style.opacity = '0.4';
+        }
+      });
+    }
+
+    // Copy ATS Plain Text
+    function copyATSText() {
+      const atsText = document.getElementById('ats-view').innerText;
+      const textarea = document.createElement('textarea');
+      textarea.value = atsText;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      const btn = event.currentTarget;
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-check text-green-400"></i> Kopiert!';
+      setTimeout(() => {
+        btn.innerHTML = originalHTML;
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
