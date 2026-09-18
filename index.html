@@ -177,6 +177,10 @@
         <button onclick="copyATSText()" class="px-3 py-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 text-xs font-medium rounded-lg border border-amber-500/30 flex items-center gap-2 cursor-pointer">
           <i class="fa-solid fa-copy"></i> Text kopieren
         </button>
+        <div class="flex items-center bg-slate-800 p-1 rounded-lg border border-slate-700" aria-label="Language switcher">
+          <button id="btn-de" onclick="setLanguage('de')" class="px-2.5 py-1 rounded text-xs font-bold bg-amber-500 text-black cursor-pointer" aria-pressed="true">DE</button>
+          <button id="btn-en" onclick="setLanguage('en')" class="px-2.5 py-1 rounded text-xs font-bold text-slate-300 hover:text-white cursor-pointer" aria-pressed="false">EN</button>
+        </div>
       </div>
     </div>
   </header>
@@ -192,7 +196,7 @@
       <div class="flex flex-wrap items-center gap-2 text-xs">
         <span class="text-slate-400 font-medium">Quick Stats:</span>
         <span class="px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-full font-mono">6+ Jahre PO XP</span>
-        <span class="px-2.5 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded-full font-mono">80 ➔ 25 System Reduzierung</span>
+        <span class="px-2.5 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded-full font-mono">80 ➔ 10+ System Reduzierung</span>
         <span class="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-full font-mono">PSM II Certified</span>
       </div>
     </div>
@@ -240,7 +244,7 @@
               <div class="flex-1 space-y-2 text-xs">
                 <div class="bg-amber-50/80 p-2.5 rounded-xl border border-amber-300 text-slate-800">
                   <span class="font-bold text-amber-900 block mb-0.5"><i class="fa-solid fa-compass mr-1"></i> TRAINER PROFIL:</span>
-                  Erfahrener Scrum Product Owner (6+ Jahre XP) mit tiefem Fokus auf Anforderungsmanagement, BPMN-Prozessoptimierung, API-Integrationen und KI-gestützte Workflow-Automatisierung.
+                  Produkt Owner mit über 6 Jahren Erfahrung in der Entwicklung komplexer B2B-Workflow-Produkte im Enterprise-Umfeld. Ich verbinde Product Discovery, Prozessoptimierung, API-Integrationen sowie daten- und KI-gestützte Automatisierung, um komplexe Geschäftsprozesse in skalierbare digitale Produkte zu übersetzen.
                 </div>
                 <div class="grid grid-cols-2 gap-2 text-[11px] font-bold">
                   <div class="bg-amber-200/80 px-2 py-1 rounded border border-amber-400 text-amber-950">
@@ -319,7 +323,7 @@
                 <strong>BASF Services Europe GmbH</strong> (11/2021 – 08/2025)
               </p>
               <ul class="text-[11px] text-slate-800 space-y-0.5 list-disc list-inside">
-                <li>Konsolidierung der Anwendungslandschaft von 80 auf 25 Systeme.</li>
+                <li>Konsolidierung der Anwendungslandschaft von 80 auf 10+ Systeme.</li>
                 <li>Geschäftsprozess-Modellierung mit BPMN (Camunda).</li>
                 <li>Entwicklung intelligenter Support Chatbots mit Copilot Studio.</li>
               </ul>
@@ -416,8 +420,7 @@
           PROFIL & ZUSAMMENFASSUNG
         </h2>
         <p class="text-sm text-slate-300 leading-relaxed">
-          Erfahrener Scrum Product Owner (6+ Jahre Erfahrung) mit Schwerpunkt Anforderungsmanagement, Prozessoptimierung und der Umsetzung komplexer, bereichsübergreifender IT- & Digitalprojekte. Routiniert in der Erhebung, Analyse und Priorisierung fachlicher Anforderungen, der Moderation von Agilen Workshops und der schnellen Einarbeitung in neue technische Domänen. Sicher in der Strukturierung unklarer Initiativen und deren Übersetzung in klare, testbare User Stories und Akzeptanzkriterien. Tiefgehende Erfahrung mit Jira, Confluence und Azure DevOps sowie fundierte Kenntnisse in BPMN (Camunda), UX-Prototyping (Figma) und KI-gestützter Workflow-Automatisierung.
-        </p>
+        Produktmanager mit über 6 Jahren Erfahrung in der Entwicklung und Weiterentwicklung komplexer B2B- und Enterprise-Produkte. Schwerpunkt auf Product Discovery, Anforderungsmanagement, Prozessoptimierung und der Übersetzung komplexer Geschäftsanforderungen in skalierbare digitale Lösungen. Erfahren in der Zusammenarbeit mit Fachbereichen, Kunden und Engineering-Teams sowie in der Strukturierung unklarer Problemstellungen und deren Überführung in klare Produktanforderungen. Technisch versiert in Daten- und API-Integrationen, BPMN (Camunda), UX-Prototyping (Figma) und KI-gestützter Workflow-Automatisierung.        </p>
       </section>
 
       <!-- BERUFSERFAHRUNG -->
@@ -452,7 +455,7 @@
           <p class="text-xs text-slate-400 mb-2 font-medium">BASF Services Europe GmbH • Berlin, Deutschland</p>
           <ul class="list-disc list-inside text-sm text-slate-300 space-y-1.5">
             <li>Fachliche Anforderungen systematisch erhoben, analysiert und priorisiert; Abstimmung mit Stakeholdern zur Definition klarer MVP-Kriterien.</li>
-            <li>Konsolidierung der Anwendungslandschaft von 80 auf 25 Systeme durch strukturierte Anforderungsanalyse und Eliminierung redundanter Lösungen.</li>
+            <li>Konsolidierung der Anwendungslandschaft von 80 auf 10+ Systeme durch strukturierte Anforderungsanalyse und Eliminierung redundanter Lösungen.</li>
             <li>Geschäftsprozesse mittels BPMN (Camunda) modelliert und optimiert zur Standardisierung fachlicher Abläufe und Risikoreduzierung.</li>
             <li>Entwicklung von Chatbots mit Copilot Studio zur Automatisierung wiederkehrender Support-Prozesse.</li>
             <li>Revisionssichere Dokumentation von Anforderungen, Prozessmodellen und Artefakten in SharePoint, Jira und Confluence.</li>
@@ -554,6 +557,111 @@
   </main>
 
   <script>
+    const translations = {
+      de: {
+        ui: {
+          role: 'Senior Scrum Product Owner',
+          cardMode: '<i class="fa-solid fa-id-card mr-1.5"></i> Pokémon Card',
+          atsMode: '<i class="fa-solid fa-file-lines mr-1.5"></i> ATS',
+          print: '<i class="fa-solid fa-print"></i> PDF / Drucken',
+          copy: '<i class="fa-solid fa-copy"></i> Text kopieren',
+          search: 'Skill oder Tool suchen (z.B. Camunda, Jira, Python)...',
+          stats: 'Quick Stats:',
+          profile: 'TRAINER PROFIL:',
+          mainMoves: '⚔️ MAIN MOVES & EXPERIENCE',
+          inventory: '🎒 INVENTORY & SKILL STATS',
+          ability: 'Ability'
+        },
+        ats: {
+          summary: 'PROFIL & ZUSAMMENFASSUNG',
+          experience: 'BERUFSERFAHRUNG',
+          skills: 'FÄHIGKEITEN & METHODEN',
+          education: 'AUSBILDUNG & ZERTIFIZIERUNGEN',
+          languages: 'SPRACHEN'
+        }
+      },
+      en: {
+        ui: {
+          role: 'Senior Scrum Product Owner',
+          cardMode: '<i class="fa-solid fa-id-card mr-1.5"></i> Pokémon Card',
+          atsMode: '<i class="fa-solid fa-file-lines mr-1.5"></i> ATS',
+          print: '<i class="fa-solid fa-print"></i> Print / PDF',
+          copy: '<i class="fa-solid fa-copy"></i> Copy text',
+          search: 'Search skill or tool (e.g. Camunda, Jira, Python)...',
+          stats: 'Quick stats:',
+          profile: 'TRAINER PROFILE:',
+          mainMoves: '⚔️ MAIN MOVES & EXPERIENCE',
+          inventory: '🎒 INVENTORY & SKILL STATS',
+          ability: 'Ability'
+        },
+        ats: {
+          summary: 'PROFILE & SUMMARY',
+          experience: 'PROFESSIONAL EXPERIENCE',
+          skills: 'SKILLS & METHODS',
+          education: 'EDUCATION & CERTIFICATIONS',
+          languages: 'LANGUAGES'
+        }
+      }
+    };
+
+    const englishContent = {
+      summary: 'Product manager with more than 6 years of experience developing and evolving complex B2B and enterprise products. Focused on product discovery, requirements management, process optimization, and translating complex business needs into scalable digital solutions. Experienced in collaborating with business teams, customers, and engineering teams, structuring ambiguous problems, and turning them into clear product requirements. Technically proficient in data and API integrations, BPMN (Camunda), UX prototyping (Figma), and AI-supported workflow automation.',
+      roles: [
+        ['Senior Scrum Product Owner - Business Management Platform', 'Zertificon Solutions GmbH • Berlin, Germany', ['Owned central certificate tools end to end, structuring and prioritizing requirements and delivering stable issuance, renewal, and revocation processes.', 'Reactivated a blocked multi-tenant project, gathering requirements in more than 10 stakeholder workshops and delivering a solution including SugarCRM data harmonization.', 'Delivered a critical DARZ renewal process within one month by clarifying responsibilities and establishing end-to-end testing.', 'Owned the Telekom API integration, clarified domain validation processes through UX prototypes, and created interactive Figma Make prototypes.', 'Wrote precise user stories and acceptance criteria; used AI-supported techniques to define requirements and shorten development cycles.', 'Enabled the team through workshops on improved Scrum/Jira processes and structured Confluence documentation.']],
+        ['Professional Scrum Product Owner', 'BASF Services Europe GmbH • Berlin, Germany', ['Systematically gathered, analyzed, and prioritized business requirements and aligned stakeholders on clear MVP criteria.', 'Reduced the application landscape from 80 to 10+ systems through structured requirements analysis and removal of redundant solutions.', 'Modeled and optimized business processes with BPMN (Camunda) to standardize workflows and reduce risk.', 'Developed chatbots with Copilot Studio to automate recurring support processes.', 'Maintained audit-ready documentation of requirements, process models, and artifacts in SharePoint, Jira, and Confluence.', 'Wrote user stories with precise acceptance criteria and facilitated regular grooming and refinement sessions.']],
+        ['Product Manager', '.companion Strategieberatung GmbH • Berlin, Germany', ['Successfully introduced and configured Jira and Confluence for the team.', 'Prepared and facilitated all Scrum events: daily, sprint planning, grooming, retrospective, and review.', 'Analyzed stakeholder pain points and validated them using a time-box model.']],
+        ['Scrum Product Owner (Platform)', 'Dominion Inc. • Berlin, Germany', ['Managed internal and external stakeholder communication for product requirements.', 'Managed the product backlog and sprint planning with Atlassian Jira.']],
+        ['Data Manager', 'Zeppelin Lab GmbH • Berlin, Germany', ['Managed data and automated database processes with Python ETL scripts.', 'Performed data analysis and quality control with Metabase and Kanban.']]
+      ],
+      skills: ['<strong class="text-white">Agile management:</strong> Scrum, Kanban, product backlog management, user stories, stakeholder management', '<strong class="text-white">Processes & tools:</strong> BPMN (Camunda), Jira, Confluence, Azure DevOps, Figma Make, Power BI, Power Automate, Miro', '<strong class="text-white">AI & technology:</strong> Copilot Studio, vibe coding (prompt engineering, GitHub, VS Code), Python, SugarCRM', '<strong class="text-white">Frameworks:</strong> Scrum, Nexus, BANI, Cynefin, Kotter 8-step model, Liberating Structures'],
+      education: ['<strong class="text-white">Professional Scrum Master II (PSM II)</strong>', '<strong class="text-white">PSM & PSPO Advanced Training (2026):</strong> KnOot Academy (BANI, Zombie Scrum Survival, agile maturity, scaled agile, customer journey, conflict management)', '<strong class="text-white">B.Sc. Business Mathematics (2016):</strong> Technische Universität Berlin'],
+      languages: ['<strong class="text-white">German:</strong> Native', '<strong class="text-white">Chinese:</strong> Native', '<strong class="text-white">English:</strong> Professional working proficiency (C1)']
+    };
+
+    function setLanguage(language) {
+      const content = translations[language];
+      const isEnglish = language === 'en';
+      document.documentElement.lang = language;
+      document.title = isEnglish ? 'Pokémon TCG Resume - Xiaoman Zhang' : 'Pokémon TCG Lebenslauf - Xiaoman Zhang';
+      document.getElementById('btn-de').className = isEnglish ? 'px-2.5 py-1 rounded text-xs font-bold text-slate-300 hover:text-white cursor-pointer' : 'px-2.5 py-1 rounded text-xs font-bold bg-amber-500 text-black cursor-pointer';
+      document.getElementById('btn-en').className = isEnglish ? 'px-2.5 py-1 rounded text-xs font-bold bg-amber-500 text-black cursor-pointer' : 'px-2.5 py-1 rounded text-xs font-bold text-slate-300 hover:text-white cursor-pointer';
+      document.getElementById('btn-de').setAttribute('aria-pressed', String(!isEnglish));
+      document.getElementById('btn-en').setAttribute('aria-pressed', String(isEnglish));
+      document.querySelector('header p').textContent = content.ui.role + ' • Level 6+ XP';
+      document.getElementById('btn-card-mode').innerHTML = content.ui.cardMode;
+      document.getElementById('btn-ats-mode').innerHTML = content.ui.atsMode;
+      document.querySelector('button[onclick="printCV()"]').innerHTML = content.ui.print;
+      document.querySelector('button[onclick="copyATSText()"]').innerHTML = content.ui.copy;
+      document.getElementById('skill-search').placeholder = content.ui.search;
+      document.querySelector('.text-slate-400.font-medium').textContent = content.ui.stats;
+      document.querySelector('.pokemon-card .text-amber-900.block').innerHTML = '<i class="fa-solid fa-compass mr-1"></i> ' + content.ui.profile;
+      document.querySelector('.pokemon-card h3.border-b-2').textContent = content.ui.mainMoves;
+      document.querySelector('.pokemon-card h4.flex.items-center').textContent = content.ui.inventory;
+      document.querySelectorAll('.pokemon-card span.uppercase').forEach((element) => { element.textContent = content.ui.ability; });
+
+      const atsHeadings = document.querySelectorAll('#ats-view section h2');
+      Object.values(content.ats).forEach((heading, index) => { atsHeadings[index].textContent = heading; });
+      if (isEnglish) {
+        document.querySelector('#ats-view section p').textContent = englishContent.summary;
+        document.querySelectorAll('#ats-view article').forEach((article, index) => {
+          const role = englishContent.roles[index];
+          article.querySelector('h3').textContent = role[0];
+          article.querySelector('p').textContent = role[1];
+          article.querySelectorAll('li').forEach((item, bulletIndex) => { item.textContent = role[2][bulletIndex]; });
+        });
+        document.querySelectorAll('#ats-view .grid > section:first-child > div > div').forEach((item, index) => { item.innerHTML = englishContent.skills[index]; });
+        document.querySelectorAll('#ats-view .grid > section:last-child li').forEach((item, index) => { item.innerHTML = englishContent.education[index]; });
+        document.querySelectorAll('#ats-view > section:last-child span').forEach((item, index) => { item.innerHTML = englishContent.languages[index]; });
+      } else {
+        localStorage.removeItem('resume-language');
+        window.location.reload();
+        return;
+      }
+      localStorage.setItem('resume-language', language);
+    }
+
+    if (localStorage.getItem('resume-language') === 'en') setLanguage('en');
+
     // Mode Switching
     function switchMode(mode) {
       const cardView = document.getElementById('card-view');
