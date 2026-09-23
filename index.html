@@ -194,10 +194,10 @@
         <input type="text" id="skill-search" onkeyup="filterKeywords()" placeholder="Skill oder Tool suchen (z.B. Camunda, Jira, Python)..." class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-10 pr-4 py-2 text-sm text-slate-200 focus:outline-none focus:border-amber-500 transition">
       </div>
       <div class="flex flex-wrap items-center gap-2 text-xs">
-        <span class="text-slate-400 font-medium">Quick Stats:</span>
-        <span class="px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-full font-mono">6+ Jahre PO XP</span>
-        <span class="px-2.5 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded-full font-mono">80 ➔ 10+ System Reduzierung</span>
-        <span class="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-full font-mono">PSM II Certified</span>
+        <span id="quick-stats-label" class="text-slate-400 font-medium">Quick Stats:</span>
+        <span id="quick-stat-experience" class="px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-full font-mono">6+ Jahre PO XP</span>
+        <span id="quick-stat-systems" class="px-2.5 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-300 rounded-full font-mono">80 ➔ 10+ System Reduzierung</span>
+        <span id="quick-stat-certification" class="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 rounded-full font-mono">PSM II Certified</span>
       </div>
     </div>
 
@@ -565,12 +565,15 @@
           copy: '<i class="fa-solid fa-copy"></i> Text kopieren',
           search: 'Skill oder Tool suchen (z.B. Camunda, Jira, Python)...',
           stats: 'Quick Stats:',
+          experienceStat: '6+ Jahre PO-Erfahrung',
+          systemsStat: '80 ➔ 10+ Systemreduzierung',
+          certificationStat: 'PSM II zertifiziert',
           location: 'Berlin, Deutschland',
           linkedin: 'LinkedIn-Profil',
           profile: 'TRAINER PROFIL:',
-          mainMoves: '⚔️ MAIN MOVES & EXPERIENCE',
-          inventory: '🎒 INVENTORY & SKILL STATS',
-          ability: 'Ability'
+          mainMoves: '⚔️ HAUPTATTACKEN & ERFAHRUNG',
+          inventory: '🎒 INVENTAR & SKILL-WERTE',
+          ability: 'Fähigkeit'
         },
         ats: {
           summary: 'PROFIL & ZUSAMMENFASSUNG',
@@ -589,6 +592,9 @@
           copy: '<i class="fa-solid fa-copy"></i> Copy text',
           search: 'Search skill or tool (e.g. Camunda, Jira, Python)...',
           stats: 'Quick stats:',
+          experienceStat: '6+ years PO experience',
+          systemsStat: '80 ➔ 10+ systems consolidated',
+          certificationStat: 'PSM II certified',
           location: 'Berlin, Germany',
           linkedin: 'LinkedIn Profile',
           profile: 'TRAINER PROFILE:',
@@ -623,23 +629,25 @@
 
     const cardContent = {
       de: {
+        stage: 'Entwicklungsstufe 2 • Senior-Evolution',
         imageLabel: 'Product Owner',
         location: '📍 Standort: Berlin',
         education: '🎓 B.Sc. TU Berlin',
         abilities: [
-          ['Requirements Mastery (Passive)', 'Transformiert unklare Stakeholder-Initiativen präzise in strukturierte, testbare User Stories, Akzeptanzkriterien & reaktionsschnelle MVP-Backlogs.'],
-          ['Vibe Coding & AI Support (Passive)', 'Nutzt Copilot Studio, Prompt Engineering, Python zur Automatisierung von Support-Abläufen und Beschleunigung von Dev-Zyklen.']
+          ['Anforderungsmeisterschaft (Passiv)', 'Transformiert unklare Stakeholder-Initiativen präzise in strukturierte, testbare User Stories, Akzeptanzkriterien & reaktionsschnelle MVP-Backlogs.'],
+          ['Vibe Coding & KI-Support (Passiv)', 'Nutzt Copilot Studio, Prompt Engineering, Python zur Automatisierung von Support-Abläufen und Beschleunigung von Dev-Zyklen.']
         ],
         moves: [
-          ['Multi-Tenant & E2E Certificate Unblock', '<strong>Zertificon Solutions GmbH</strong> (09/2025 – 02/2026)', ['Reaktivierung blockierter Multi-Tenant-Projekte via 10+ Workshops & SugarCRM-Harmonisierung.', 'End-to-End-Ownership für Zertifikatstools; DARZ-Renewal-Prozess binnen 30 Tagen stabilisiert.', 'Konzeption der Telekom-API-Integration & Rapid UX-Prototyping mit Figma Make.']],
-          ['System Consolidation Blast (80 ➔ 10+)', '<strong>BASF Services Europe GmbH</strong> (11/2021 – 08/2025)', ['Systemlandschaft von 80 auf 10+ Systeme konsolidiert; Anwender-Pain-Points in BPMN (Camunda) überführt.', 'Vorbereitung von Toolwechseln: Eigenständige relationale Datenanalyse & Reports via SQL (mit Copilot).', 'Konzeption intelligenter First-Level-Support-Chatbots mit Microsoft Copilot Studio.']],
-          ['Data Pipelines & Agile Foundations', '<strong>Zeppelin Lab • Dominion • .companion</strong> (2018 – 2021)', ['Python-ETL-Pipelines & Metabase-Dashboards bei Zeppelin Lab aufgebaut.', 'Agiles Backlog-Management, User Stories & Jira-Workflows bei Dominion & .companion.', 'Schnittstellen-Alignment und agile Prozessetablierung von Grund auf.']]
+          ['Multi-Tenant & E2E-Zertifikatsfreischaltung', '<strong>Zertificon Solutions GmbH</strong> (09/2025 – 02/2026)', ['Reaktivierung blockierter Multi-Tenant-Projekte via 10+ Workshops & SugarCRM-Harmonisierung.', 'End-to-End-Ownership für Zertifikatstools; DARZ-Renewal-Prozess binnen 30 Tagen stabilisiert.', 'Konzeption der Telekom-API-Integration & Rapid UX-Prototyping mit Figma Make.']],
+          ['Systemkonsolidierung (80 ➔ 10+)', '<strong>BASF Services Europe GmbH</strong> (11/2021 – 08/2025)', ['Systemlandschaft von 80 auf 10+ Systeme konsolidiert; Anwender-Pain-Points in BPMN (Camunda) überführt.', 'Vorbereitung von Toolwechseln: Eigenständige relationale Datenanalyse & Reports via SQL (mit Copilot).', 'Konzeption intelligenter First-Level-Support-Chatbots mit Microsoft Copilot Studio.']],
+          ['Datenpipelines & agile Grundlagen', '<strong>Zeppelin Lab • Dominion • .companion</strong> (2018 – 2021)', ['Python-ETL-Pipelines & Metabase-Dashboards bei Zeppelin Lab aufgebaut.', 'Agiles Backlog-Management, User Stories & Jira-Workflows bei Dominion & .companion.', 'Schnittstellen-Alignment und agile Prozessetablierung von Grund auf.']]
         ],
-        inventory: [['Agile & Discovery:', 'Product Discovery, User Stories, MVP-Scoping, Roadmap-Priorisierung'], ['Data & Analytics:', 'Wirtschaftsmathematik, SQL, Metabase, Python (ETL), Single Source of Truth'], ['Plattform & Schnittstellen:', 'BPMN (Camunda), REST-API, Multi-Tenant, Systemkonsolidierung'], ['AI, Tools & Lang:', 'Copilot Studio, Vibe Coding, Figma, Jira | DE & CN (Muttersprache), EN (C1)']],
-        footer: ['Weakness: ', 'Silo-Denken ×2', 'Resistance: ', 'Scope Creep -30', 'Retreat Cost: '],
+        inventory: [['Agilität & Discovery:', 'Product Discovery, User Stories, MVP-Scoping, Roadmap-Priorisierung'], ['Daten & Analytics:', 'Wirtschaftsmathematik, SQL, Metabase, Python (ETL), Single Source of Truth'], ['Plattformen & Schnittstellen:', 'BPMN (Camunda), REST-API, Multi-Tenant, Systemkonsolidierung'], ['KI, Tools & Sprachen:', 'Copilot Studio, Vibe Coding, Figma, Jira | DE & CN (Muttersprache), EN (C1)']],
+        footer: ['Schwäche: ', 'Silo-Denken ×2', 'Resistenz: ', 'Scope Creep -30', 'Rückzugskosten: '],
         flavor: '"Ein extrem anpassungsfähiger Senior PO. Bekannt dafür, blockierte Projekte mit präziser Kommunikation und KI-Tools in Höchstgeschwindigkeit freizuschalten."'
       },
       en: {
+        stage: 'Stage 2 • Senior Evolution',
         imageLabel: 'Product Owner',
         location: '📍 Location: Berlin',
         education: '🎓 B.Sc. TU Berlin',
@@ -686,7 +694,10 @@
       document.querySelector('button[onclick="printCV()"]').innerHTML = content.ui.print;
       document.querySelector('button[onclick="copyATSText()"]').innerHTML = content.ui.copy;
       document.getElementById('skill-search').placeholder = content.ui.search;
-      document.querySelector('.text-slate-400.font-medium').textContent = content.ui.stats;
+      document.getElementById('quick-stats-label').textContent = content.ui.stats;
+      document.getElementById('quick-stat-experience').textContent = content.ui.experienceStat;
+      document.getElementById('quick-stat-systems').textContent = content.ui.systemsStat;
+      document.getElementById('quick-stat-certification').textContent = content.ui.certificationStat;
       document.getElementById('ats-location').textContent = content.ui.location;
       document.getElementById('ats-linkedin').textContent = content.ui.linkedin;
       document.querySelector('.pokemon-card .text-amber-900.block').innerHTML = '<i class="fa-solid fa-compass mr-1"></i> ' + content.ui.profile;
@@ -695,6 +706,7 @@
       document.querySelectorAll('.pokemon-card span.uppercase').forEach((element) => { element.textContent = content.ui.ability; });
 
       const selectedCardContent = cardContent[language];
+      document.getElementById('card-stage').textContent = selectedCardContent.stage;
       document.getElementById('card-location').textContent = selectedCardContent.location;
       document.getElementById('card-education').textContent = selectedCardContent.education;
       document.getElementById('card-image-label').textContent = selectedCardContent.imageLabel;
@@ -747,7 +759,8 @@
       localStorage.setItem('resume-language', language);
     }
 
-    if (localStorage.getItem('resume-language') === 'en') setLanguage('en');
+    const savedLanguage = localStorage.getItem('resume-language');
+    setLanguage(savedLanguage === 'en' ? 'en' : 'de');
 
     // Mode Switching
     function switchMode(mode) {
